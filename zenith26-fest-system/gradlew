@@ -1,0 +1,6 @@
+#!/bin/bash
+# Convenient root wrapper that runs Gradle commands inside android/
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export JAVA_HOME="${JAVA_HOME:-/opt/homebrew/opt/openjdk@17}"
+export ANDROID_HOME="${ANDROID_HOME:-/Users/admin/Library/Android/sdk}"
+exec "$DIR/android/gradlew" -p "$DIR/android" "$@"

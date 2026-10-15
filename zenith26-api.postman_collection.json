@@ -1,0 +1,277 @@
+{
+  "info": {
+    "_postman_id": "c71a3554-47b2-4d2c-9602-09252c882a1e",
+    "name": "Zenith '26 Fest Management API",
+    "description": "Postman API test collection for Zenith '26 College Fest Management System (FastAPI + SQLite backend). Companion to PM2-01 & PM2-02.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "GET All Events (No Filters)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events"]
+            },
+            "description": "Fetch all events with live computed available_seats"
+          },
+          "response": []
+        },
+        {
+          "name": "GET Events with Filters (?category=Technical&search=Sprint)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events?category=Technical&search=Sprint",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events"],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Technical",
+                  "description": "Filter by category (Technical, Cultural, Sports, Gaming, Workshop)"
+                },
+                {
+                  "key": "search",
+                  "value": "Sprint",
+                  "description": "Case-insensitive title search"
+                }
+              ]
+            },
+            "description": "Filter events by category and title substring"
+          },
+          "response": []
+        },
+        {
+          "name": "GET Single Event Detail (ID 1)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "1"]
+            },
+            "description": "Fetch details for event ID 1 (Code Sprint 2.0)"
+          },
+          "response": []
+        },
+        {
+          "name": "GET Non-existent Event (404 Test)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/events/999",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "999"]
+            },
+            "description": "Tests 404 response when querying a non-existent event ID"
+          },
+          "response": []
+        },
+        {
+          "name": "POST Create Event (Admin Stretch Goal - 201)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Quantum Computing Hack\",\n  \"category\": \"Technical\",\n  \"description\": \"Build quantum circuits and test simulation algorithms.\",\n  \"event_date\": \"2026-11-15\",\n  \"event_time\": \"02:00 PM\",\n  \"venue\": \"Physics Lab 3\",\n  \"capacity\": 30,\n  \"fee\": 0,\n  \"icon\": \"⚛️\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/events",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events"]
+            },
+            "description": "Stretch goal: Admin creates a new fest event"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Registrations",
+      "item": [
+        {
+          "name": "POST Register for Event 1 (Success - 201 Created)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_name\": \"Charu Bansal\",\n  \"roll_number\": \"26MBA009\",\n  \"email\": \"charu.bansal@college.edu\",\n  \"phone\": \"9876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/events/1/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "1", "register"]
+            },
+            "description": "Successful registration for event 1. Expected status: 201 Created."
+          },
+          "response": []
+        },
+        {
+          "name": "POST Register (Failure - Missing Required Field - 400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_name\": \"\",\n  \"roll_number\": \"26MBA009\",\n  \"email\": \"test@college.edu\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/events/1/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "1", "register"]
+            },
+            "description": "Fails validation due to empty student_name. Expected: 400 Bad Request."
+          },
+          "response": []
+        },
+        {
+          "name": "POST Register (Failure - Invalid Email - 400)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_name\": \"Charu Bansal\",\n  \"roll_number\": \"26MBA009\",\n  \"email\": \"invalidemailwithoutat\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/events/1/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "1", "register"]
+            },
+            "description": "Fails validation due to missing @ in email. Expected: 400 Bad Request."
+          },
+          "response": []
+        },
+        {
+          "name": "POST Register (Failure - Duplicate Registration - 409)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"student_name\": \"Charu Bansal\",\n  \"roll_number\": \"26MBA009\",\n  \"email\": \"charu.bansal@college.edu\",\n  \"phone\": \"9876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/events/1/register",
+              "host": ["{{base_url}}"],
+              "path": ["api", "events", "1", "register"]
+            },
+            "description": "Repeats registration with the same email for event 1. Expected: 409 Conflict ('Already registered')."
+          },
+          "response": []
+        },
+        {
+          "name": "GET All Registrations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/registrations",
+              "host": ["{{base_url}}"],
+              "path": ["api", "registrations"]
+            },
+            "description": "Returns list of student registrations including event title"
+          },
+          "response": []
+        },
+        {
+          "name": "GET Registrations Filtered by Event (?event_id=1)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/registrations?event_id=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "registrations"],
+              "query": [
+                {
+                  "key": "event_id",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Returns registrations specifically for event 1"
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Registration (Admin Stretch Goal - 200)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/registrations/1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "registrations", "1"]
+            },
+            "description": "Stretch goal: Cancel registration ID 1"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin & Stats",
+      "item": [
+        {
+          "name": "GET Admin Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "stats"]
+            },
+            "description": "Returns live computed fest statistics (utilization, upcoming counts, category breakdown)"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+# Python Virtual Environments & Bytecode
+.venv/
+*/.venv/
+venv/
+*/venv/
+ENV/
+env/
+__pycache__/
+*/__pycache__/
+*.py[cod]
+
+# Server logs
+*.log
+*/server.log
+
+# Database temporary files
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Android & Gradle Build Cache (preserve output APKs)
+.gradle/
+*/.gradle/
+android/app/build/intermediates/
+android/app/build/tmp/
+android/app/build/kotlin/
+android/app/build/generated/
+zenith26-fest-system/android/app/build/intermediates/
+zenith26-fest-system/android/app/build/tmp/
+zenith26-fest-system/android/app/build/kotlin/
+zenith26-fest-system/android/app/build/generated/
+local.properties
+*/local.properties
+.idea/
+*.iml
+.cxx/
+
+# macOS / OS files
+.DS_Store
+*/.DS_Store
+Thumbs.db

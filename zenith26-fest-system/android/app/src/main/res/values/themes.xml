@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Zenith26" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand colors matching Zenith '26 -->
+        <item name="colorPrimary">@color/brand_primary</item>
+        <item name="colorPrimaryVariant">@color/brand_primary_variant</item>
+        <item name="colorOnPrimary">@color/text_primary</item>
+        
+        <!-- Status bar and navigation bar integration -->
+        <item name="android:statusBarColor">@color/brand_background</item>
+        <item name="android:navigationBarColor">@color/brand_background</item>
+        <item name="android:windowBackground">@color/brand_background</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+</resources>

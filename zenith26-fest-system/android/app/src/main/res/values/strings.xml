@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Zenith \'26</string>
+    <string name="action_reload">Reload</string>
+    <string name="action_server_settings">Server Settings</string>
+    <string name="server_settings_title">Backend Server Settings</string>
+    <string name="server_settings_hint">e.g. http://10.0.2.2:8080</string>
+    <string name="server_settings_save">Connect</string>
+    <string name="server_settings_cancel">Cancel</string>
+    <string name="connection_error_title">Cannot connect to Zenith \'26 Backend</string>
+</resources>
