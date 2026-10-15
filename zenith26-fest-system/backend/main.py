@@ -20,7 +20,22 @@ from backend.models import (
 from backend.seed_data import seed_events
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-FRONTEND_DIR = BASE_DIR / "frontend"
+
+
+def get_frontend_dir() -> Path:
+    candidates = [
+        BASE_DIR / "frontend",
+        BASE_DIR / "zenith26-fest-system" / "frontend",
+        Path.cwd() / "frontend",
+        Path.cwd() / "zenith26-fest-system" / "frontend",
+    ]
+    for c in candidates:
+        if c.exists():
+            return c
+    return BASE_DIR / "frontend"
+
+
+FRONTEND_DIR = get_frontend_dir()
 
 app = FastAPI(
     title="Zenith '26 College Fest Management System API",
@@ -417,22 +432,33 @@ def cancel_registration(registration_id: int):
 # Frontend Static Files & SPA Routing
 # ==========================================
 
-# Mount JS assets
-app.mount("/js", StaticFiles(directory=str(FRONTEND_DIR / "js")), name="js")
+# Mount JS assets if directory exists
+js_dir = FRONTEND_DIR / "js"
+if js_dir.exists():
+    app.mount("/js", StaticFiles(directory=str(js_dir)), name="js")
 
 
 @app.get("/", response_class=FileResponse)
 def serve_index():
     """Serve the student event portal."""
-    return FileResponse(FRONTEND_DIR / "index.html")
+    target = FRONTEND_DIR / "index.html"
+    if not target.exists():
+        target = Path.cwd() / "index.html"
+    return FileResponse(target)
 
 
 @app.get("/index.html", response_class=FileResponse)
 def serve_index_html():
-    return FileResponse(FRONTEND_DIR / "index.html")
+    target = FRONTEND_DIR / "index.html"
+    if not target.exists():
+        target = Path.cwd() / "index.html"
+    return FileResponse(target)
 
 
 @app.get("/admin.html", response_class=FileResponse)
 def serve_admin():
     """Serve the fest admin dashboard."""
-    return FileResponse(FRONTEND_DIR / "admin.html")
+    target = FRONTEND_DIR / "admin.html"
+    if not target.exists():
+        target = Path.cwd() / "admin.html"
+    return FileResponse(target)

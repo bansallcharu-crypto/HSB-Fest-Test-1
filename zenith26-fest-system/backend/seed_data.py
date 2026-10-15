@@ -3,7 +3,20 @@ import openpyxl
 from backend.database import get_db_connection, init_db
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SEED_FILE = BASE_DIR / "data" / "events_seed.xlsx"
+
+
+def get_seed_file() -> Path:
+    candidates = [
+        BASE_DIR / "data" / "events_seed.xlsx",
+        BASE_DIR / "zenith26-fest-system" / "data" / "events_seed.xlsx",
+        BASE_DIR / "events_seed.xlsx",
+        Path.cwd() / "data" / "events_seed.xlsx",
+        Path.cwd() / "events_seed.xlsx",
+    ]
+    for c in candidates:
+        if c.exists():
+            return c
+    return BASE_DIR / "data" / "events_seed.xlsx"
 
 
 def seed_events():
@@ -21,14 +34,15 @@ def seed_events():
         conn.close()
         return
 
+    seed_file = get_seed_file()
     # Check if the spreadsheet exists
-    if not SEED_FILE.exists():
+    if not seed_file.exists():
         conn.close()
         raise FileNotFoundError(
-            f"Seed data file not found at '{SEED_FILE}'. Please copy the provided events_seed.xlsx file into the data/ folder before running this script."
+            f"Seed data file not found at '{seed_file}'. Please copy the provided events_seed.xlsx file into the data/ folder before running this script."
         )
 
-    wb = openpyxl.load_workbook(str(SEED_FILE))
+    wb = openpyxl.load_workbook(str(seed_file))
     if "Events" not in wb.sheetnames:
         conn.close()
         raise ValueError(
